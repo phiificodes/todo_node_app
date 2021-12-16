@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-//create database schema using the structure of document(record) in mongoDB
+//model is a structure/blueprint of our database
+//using schema we create the structure of our db
 const todoschema = mongoose.Schema(
   {
     title: String,
@@ -11,7 +12,6 @@ const todoschema = mongoose.Schema(
   { timestamp: true } // keeps track of the data(document) updates
 );
 
-//create model
+//create model and export
 const todo = mongoose.model("todo", todoschema);
 module.exports = todo;
-//
