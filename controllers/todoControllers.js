@@ -2,26 +2,74 @@
 const todo = require("../models/todo");
 
 //controller will perform serveral functions on a model,
-function insertTodo(req, res) {
-  console.log(req.body);
+async function insertTodo(req, res) {
+  try {
+    await todo.create(req.body).then(function (data) {
+      res.status(200).json({ sucess: true });
+    });
+  } catch {
+    (function (error) {
+      res.status(401).json("Not created " + error.message);
+    });
+  }
+}
+
+function getAllTodos(req, res) {
   todo
-    .create(req.body)
-    .then(function () {
-      res.status(200).json("Data has been created");
+    .find()
+    .then(function (data) {
+      res.status(200).json({ sucess: true, total: data.length, data });
     })
     .catch(function (error) {
-      res.status(401).json("Not created " + error.message);
+      res.status(404).json({
+        sucess: false,
+        error: error.message,
+      });
     });
 }
 
-function updateTodoById(params) {}
-function deleteTodoById(params) {}
+function updateTodoById(req, res) {
+  const _id = req.params.id;
+  const { _isCompleted } = req.body;
+  console.log(req.body);
+  todo
+    .findByIdAndUpdate(_id, { isCompleted: _isCompleted })
+    .then(function (data) {
+      res
+        .status(200)
+        .json({ success: true, message: data.title + " was updated" });
+    });
+}
+
+function deleteTodoById(req, res) {
+  const _id = req.params.id;
+  todo
+    .findByIdAndDelete(_id)
+    .then(function () {
+      res
+        .status(200)
+        .json({ success: true, message: "Todo is deleted successfully" });
+    })
+    .catch(function (error) {
+      res.status(404).json({ success: false, message: error.message });
+    });
+}
 
 function getTodoById(req, res) {
-  var searchTerm = req.body;
-}
-function getAllTodos(req, res) {
-  res.send(res.body);
+  // a request method with parameter is accessed in our fnx as req.params.id, where 'id' is
+  // the specified name in our request string
+  const id = req.params.id;
+  todo
+    .findById({ _id: id })
+    .then(function (data) {
+      res.status(200).json({
+        success: true,
+        data,
+      });
+    })
+    .catch(function (error) {
+      res.status(404).json({ success: false, message: error.message });
+    });
 }
 
 // exporting multiple fnx
