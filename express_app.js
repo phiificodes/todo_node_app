@@ -15,6 +15,12 @@ server.listen(PORT, function () {
     .connect(process.env.MONGO_DB_ATLAS_TODOS_URL)
     .then(function () {
       console.log("DB is connected");
+      server.get("/", function (req, res) {
+        res.status(200).json({
+          success: true,
+          message: "Welcome to phiificodes node.js api",
+        });
+      });
       server.get("/todos", todoController.getAllTodos);
       server.get("/todo/:id", todoController.getTodoById);
       server.post("/todo", todoController.insertTodo);
