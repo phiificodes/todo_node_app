@@ -5,7 +5,9 @@ const todo = require("../models/todo");
 async function insertTodo(req, res) {
   try {
     await todo.create(req.body).then(function (data) {
-      res.status(200).json({ sucess: true });
+      res
+        .status(201)
+        .json({ sucess: true, mesaage: data.title + " is created" });
     });
   } catch {
     (function (error) {
@@ -27,18 +29,41 @@ function getAllTodos(req, res) {
       });
     });
 }
+//various ways of writing the function
+const getTodoById = async (req, res) => {
+  // a request method with parameter is accessed in our fnx as req.params.id, where 'id' is
+  // the specified name in our request string
+  try {
+    const _id = req.params.id;
+    let data = await todo.findById(_id);
 
-function updateTodoById(req, res) {
-  const _id = req.params.id;
-  const { _isCompleted } = req.body;
-  console.log(req.body);
-  todo
-    .findByIdAndUpdate(_id, { isCompleted: _isCompleted })
-    .then(function (data) {
-      res
-        .status(200)
-        .json({ success: true, message: data.title + " was updated" });
+    console.log(data, _id);
+    res.status(200).json({
+      success: true,
+      data,
     });
+  } catch (error) {
+    res.status(404).json({ success: false, message: error.message });
+  }
+};
+
+async function updateTodoById(req, res) {
+  try {
+    const _id = req.params.id;
+    const { _isCompleted } = req.body;
+    const data = await todo.findByIdAndUpdate(_id, {
+      isCompleted: _isCompleted,
+    });
+    const newData = todo.findById(_id);
+    res
+      .status(200)
+      .json({ success: true, message: newData.title + " was updated" });
+  } catch (error) {
+    res.status(404).json({
+      sucess: false,
+      error: error.message,
+    });
+  }
 }
 
 function deleteTodoById(req, res) {
@@ -49,23 +74,6 @@ function deleteTodoById(req, res) {
       res
         .status(200)
         .json({ success: true, message: "Todo is deleted successfully" });
-    })
-    .catch(function (error) {
-      res.status(404).json({ success: false, message: error.message });
-    });
-}
-
-function getTodoById(req, res) {
-  // a request method with parameter is accessed in our fnx as req.params.id, where 'id' is
-  // the specified name in our request string
-  const id = req.params.id;
-  todo
-    .findById({ _id: id })
-    .then(function (data) {
-      res.status(200).json({
-        success: true,
-        data,
-      });
     })
     .catch(function (error) {
       res.status(404).json({ success: false, message: error.message });

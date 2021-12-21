@@ -1,0 +1,4 @@
+NOTE: .env is included in the project to allow for removing urls in our code when we share it public.
+ any new user or contibutor will have to create their urls or request from project admin
+
+ .gitignore allows for excluding folders/files when pushing to our git repository
