@@ -4,11 +4,12 @@ const mongoose = require("mongoose"); //import mongoDB package
 const todoController = require("./controllers/todoControllers"); // import controller into server
 
 const server = express(); //create instance of express server package
+const PORT = proces.env.PORT || 4000;
 // const mongo_db_todos_url = "";
 
 server.use(express.json());
 
-server.listen(4000, function () {
+server.listen(PORT, function () {
   console.log("Server started,running in express...");
   mongoose
     .connect(process.env.MONGO_DB_ATLAS_TODOS_URL)
