@@ -4,10 +4,11 @@ const mongoose = require("mongoose");
 //using schema we create the structure of our db
 const todoschema = mongoose.Schema(
   {
-    title: String,
-    description: String,
-    deadline: Date,
-    isCompleted: Boolean,
+    title: { type: String, required: [true, "Title is required"] },
+    description: { type: String, required: [true, "Description required"] },
+    deadline: { type: Date },
+    created: { type: Date, default: Date.now },
+    isCompleted: { type: Boolean, required: [true, "is Todo Completed"] },
   },
   { timestamp: true } // keeps track of the data(document) updates
 );
