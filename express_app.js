@@ -28,6 +28,6 @@ server.listen(PORT, function () {
       server.delete("/todo/:id", todoController.deleteTodoById);
     })
     .catch((error) => {
-      console.log(error.message);
+      console.log("DB is not connected: " + error.message);
     });
 });
