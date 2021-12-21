@@ -2,7 +2,7 @@
   "name": "gtl_node_project",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "express_app.js",
   "scripts": {
     "app": "nodemon express_app.js"
   },
